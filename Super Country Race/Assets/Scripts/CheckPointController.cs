@@ -7,10 +7,12 @@ public class CheckPointController : MonoBehaviour
     public GameController gameController;
 
     private Transform[] checkpoints;
+    public GameObject lock1, lock2;
     private int maxCheckPoints = 0;
     private int checkpointAtual = 0;
     private int voltaAtual = 0;
     private int maximoVoltas;
+    [SerializeField] private int id = 0;
 
     private void Awake(){
         GameObject checkpointContainer = GameObject.FindGameObjectWithTag("CheckpointsContainer");
@@ -37,7 +39,15 @@ public class CheckPointController : MonoBehaviour
                     }else{
                         voltaAtual++;
                         Debug.Log(voltaAtual);
-                        gameController.UpdateVoltas(voltaAtual);
+                        if (id == 0)
+                        {
+                            gameController.UpdateVoltasP1(voltaAtual);
+                        }
+                        else
+                        {
+                            gameController.UpdateVoltasP2(voltaAtual);
+                        }
+                        
                     }
                 }else{
                     checkpointAtual = 0;
@@ -45,5 +55,30 @@ public class CheckPointController : MonoBehaviour
                 }
             }
         }
+
+        if (other.gameObject.CompareTag("Unlock"))
+        {
+            Debug.Log("Unlock");
+            if (id == 0)
+            {
+                lock1.SetActive(false);
+            }
+            else
+            {
+                lock2.SetActive(false);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+            if (id == 0)
+            {
+                lock1.SetActive(true);
+            }
+            else
+            {
+                lock2.SetActive(true);
+            }
     }
 }

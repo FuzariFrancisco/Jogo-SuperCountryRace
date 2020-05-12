@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    private bool play;
     public float m_DampTime = 0.1f;
     public float m_ScreenEdgeBuffer = 8f;
     public float m_MinSize = 6.5f;
+
+    [SerializeField] private Vector3 positionCamera;
+    [SerializeField] private Vector3 rotationCamera;
 
     [HideInInspector] private GameObject[] m_Targets;
 
@@ -16,13 +20,24 @@ public class CameraController : MonoBehaviour
     private Vector3 m_DesiredPosition;
 
     private void Awake(){
+        play = false;
         m_Camera = GetComponentInChildren<Camera>();
         m_Targets = GameObject.FindGameObjectsWithTag("Player");
     }
 
     private void FixedUpdate(){
-        Move();
-        Zoom();
+        if (play)
+        {
+            Move();
+            Zoom();
+        } 
+    }
+
+    public void Play()
+    {
+        m_Camera.transform.position = positionCamera;
+        m_Camera.transform.rotation = Quaternion.Euler(rotationCamera.x, rotationCamera.y, rotationCamera.z);
+        play = true;
     }
 
     private void Move(){

@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public int PlayerID;
+    GameController controller;
     public GameObject corpo;
     public Transform mira;
     public Rigidbody bomba;
@@ -42,6 +43,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void Start(){
+        controller = FindObjectOfType<GameController>();
+
         nomeEixoMovimento = "Vertical" + PlayerID;
         nomeEixoGiro = "Horizontal" + PlayerID;
         botaoTiro = "Fire" + PlayerID;
@@ -55,11 +58,15 @@ public class PlayerController : MonoBehaviour
         inputValorMovimento = Input.GetAxis(nomeEixoMovimento);
         inputValorGiro = Input.GetAxis(nomeEixoGiro);
 
-        Move();
-        Turn();
+        if (controller.rodando)
+        {
+            Move();
+            Turn();
 
-        if (Input.GetButtonDown(botaoTiro))
-            Fire();
+            if (Input.GetButtonDown(botaoTiro))
+                Fire();
+        }
+        
         AudioMotor();
     }
 
